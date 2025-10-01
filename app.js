@@ -13,6 +13,7 @@ let coefficient = 0; // 2nd variable in the equation
 
 let coefficientContinuation = false; // By default, do not enable operator running (1 + 2 - 3 / 3 = #)
 let summed = false; // Variable to track if the last action was the '=' button.
+let coefficientSet = false;
 
 
 
@@ -30,9 +31,7 @@ calculator.addEventListener("click", (event) => { // event.target to collect sou
     // Checks if the last action was a '='.
     // That way, if a user puts in a new number, it starts again at the beginning.
     if (summed === true) {  // If user just summed
-      operator = null;  // Reset operator value
-      base = 0; // Reset base value
-      coefficient = 0;  // Reset coefficient value
+      clearVals() // Resets all values
     }
 
     // If an operator has been set, the numbers added are for the coefficient, otherwise, they're for the base.
@@ -81,7 +80,6 @@ function increaseNum(number, variable) {
   } else {  // Edit the coefficient's value
     coefficient = coefficient * 10 + number;  // 4>5 does the following: (4 -> 40, 40 + 5 -> 45)
     displayNums(true, true, true); // Display the new set of values. Base, Operator and Coefficient
-
   }  
 }
 
@@ -97,12 +95,8 @@ function setOperator(operation) {
   }
 
   operator = operation; // Sets the value of the operator variable to the correct operation
-
-  if (coefficient.length > 0) { // Checks if there is a value in the coefficient. If yes, start running (1 + 2 - 3 / 4 = #)
-    calculate(); // Calculate the sum with this new operator in use!
-  } else {  // No value was found in the coefficient!
-    displayNums(true, false, true); // Display the new set - Base and Operator ONLY.
-  }
+  displayNums(true, false, true); // Display the new set - Base and Operator ONLY.
+  
 }
 
 
@@ -140,9 +134,10 @@ function calculate(reset = false) {
 
   summed = true; // The user just summed. So if the user immediately clicks a number, it resets the whole equation.
 
-  if (reset === true) { // The user clicked "=" so we reset the coefficient and the operator.
+  if (reset === true && coefficientSet == true) { // The user clicked "=" so we reset the coefficient and the operator.
     coefficient = 0;
     operator = null;
+    coefficientSet = false;
   }
 
   displayNums(true, false, false); // Display ONLY the base number.
@@ -159,14 +154,18 @@ function displayNums(b, c, operation) {
   clearDisplay(); // Start by resetting and clearing the display!
   if (b) { // If a base has been provided.
     const baseElem = document.createElement("p")  // Create new p element
+
     baseElem.innerText = base;  // set the p's inner text to the base value
     display.appendChild(baseElem);  // Append the base element to the display
   }
+
   if (operation) { // If the operator has been provided
     const operatorElem = document.createElement("p")  // Create new p element
+    
     operatorElem.innerText = operator;  // set the p's inner text to the operator
     display.appendChild(operatorElem);  // Append the operator element to the display
   }
+
   if (c) { // If the coefficient has been provided
     const coefficientElem = document.createElement("p")  // Create new p element
     coefficientElem.innerText = coefficient;  // set the p's inner text to the coefficient value
@@ -188,4 +187,5 @@ function clearVals() {
   base = 0;  // Resets the base
   coefficient = 0;  // Resets the coefficient
   operator = null;  // Resets the operator
+  coefficientSet = false; // Document that there isnt a coefficient already set
 }
