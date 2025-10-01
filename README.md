@@ -5,7 +5,11 @@ A simple, **calculator App** which enables the user to `add`, `subtract`, `divid
 <br>
 
 ## Overview
+There are a few key components to this system that makes it worth digging into.
 
+**Event Listening** - Instead of adding event listeners to every single button, we can cheat by creating a smarter event listener.
+**Number Incrementation** - As we add numbers to the calculator, we must shift pre-existing digits, and then add the new digit.
+**Calculating** - For a more advanced user-friendly calculator, some trickery's needed to enable features like "=" spamming, to chaining operators.
 
 
 <br>
